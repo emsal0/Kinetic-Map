@@ -1,0 +1,55 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html" charset="utf-8" />
+		<style>
+		  body {
+			margin: 0px;
+			padding: 0px;
+		  }
+		</style>
+	</head>
+	<body>
+		<div id="container"></div>
+		<script src="kinetic-v4.3.3.min.js"></script>
+		<script src="worldmap.js"></script>
+		<script>
+			var stage = new Kinetic.Stage({
+				container: "container",
+				width: parseInt(worldMap.svg["-width"]),
+				height: parseInt(worldMap.svg["-height"]),
+			});
+			var mapLayer = new Kinetic.Layer({
+				y: 0,
+				scale: 1
+			});
+			var topLayer = new Kinetic.Layer({
+				y: 0,
+				scale: 1.0
+			});
+			for (var key in worldMap["svg"]["path"]) {
+				var path = new Kinetic.Path({ 
+					data: worldMap["svg"]["path"][key]["-d"],
+					fill: '#1e1',
+					stroke: '#111',
+					strokeWidth: 1
+				});
+				
+				path.on('mouseover', function() {
+					this.setFill('#11e');
+					this.moveTo(topLayer);
+					topLayer.drawScene();
+				});
+				
+				path.on('mouseout', function() {
+					this.setFill("#1e1");
+					this.moveTo(mapLayer);
+					topLayer.drawScene();
+				});
+				mapLayer.add(path);
+			}
+			stage.add(mapLayer);
+			stage.add(topLayer);
+		</script>
+	</body>
+	</html>
